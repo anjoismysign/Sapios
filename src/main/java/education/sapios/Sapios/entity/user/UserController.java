@@ -92,8 +92,17 @@ public class UserController {
         if (userRepository.findByEmail(userEntity.getEmail()).isPresent())
             return ResponseEntity.badRequest().build();
         else {
+            if (userEntity.getHashedPassword() == null || userEntity.getHashedPassword().isEmpty()) {
+                return ResponseEntity.badRequest().build();
+            }
             return ResponseEntity.ok(userRepository.save(userEntity));
         }
+
+//        if (userRepository.findByEmail(userEntity.getEmail()).isPresent())
+//            return ResponseEntity.badRequest().build();
+//        else {
+//            return ResponseEntity.ok(userRepository.save(userEntity));
+//        }
     }
 
     /**
