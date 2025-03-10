@@ -1,6 +1,13 @@
-package education.sapios.Sapios.entity.course;
+package education.sapios.Sapios.entity.hallway;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "topics")
@@ -15,12 +22,9 @@ public class Topic {
     @Column(nullable = false, length = 1500)
     private String prompt;
 
-    @Column(nullable = false)
-    private int promptType;
-
     @ManyToOne
-    @JoinColumn(name = "unit_id", nullable = false)
-    private Unit unit;
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
 
     @Column(nullable = false)
     private int orderNumber;
@@ -37,14 +41,6 @@ public class Topic {
         this.name = name;
     }
 
-    public Unit getUnit() {
-        return unit;
-    }
-
-    public void setUnit(Unit unit) {
-        this.unit = unit;
-    }
-
     public String getPrompt() {
         return prompt;
     }
@@ -53,19 +49,19 @@ public class Topic {
         this.prompt = prompt;
     }
 
-    public int getPromptType() {
-        return promptType;
-    }
-
-    public void setPromptType(int promptType) {
-        this.promptType = promptType;
-    }
-
     public int getOrderNumber() {
         return orderNumber;
     }
 
     public void setOrderNumber(int orderNumber) {
         this.orderNumber = orderNumber;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }

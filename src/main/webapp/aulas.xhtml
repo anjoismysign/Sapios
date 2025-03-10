@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns="http://www.w3.org/1999/xhtml">
+<h:head>
+    <title>Sapios Hallway</title>
+    <h:outputStylesheet library="css" name="form.css"/>
+</h:head>
+<h:body>
+    <div class="background">
+        <h:form class="container">
+            <h:outputLabel for="course" value="Curso" class="text"/>
+            <h:selectOneMenu id="course" value="#{hallway.course}" class="dropdown-text">
+                <f:selectItems value="#{hallway.courses}" var="course" itemValue="#{course.name}"
+                               itemLabel="#{course.name}"/>
+                <f:ajax render="topic" listener="#{hallway.onCourseChange}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel for="topic" value="Tópico" class="text"/>
+            <h:selectOneMenu id="topic" value="#{hallway.topic}" class="dropdown-text">
+                <f:selectItems value="#{hallway.topics}" var="topic" itemValue="#{topic.name}"
+                               itemLabel="#{topic.name}"/>
+            </h:selectOneMenu>
+
+            <h:commandButton value="Ir a clase" action="#{hallway.submit}" class="text"/>
+        </h:form>
+    </div>
+</h:body>
+</html>
