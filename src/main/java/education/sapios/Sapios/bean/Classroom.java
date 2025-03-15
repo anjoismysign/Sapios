@@ -25,7 +25,6 @@ public class Classroom implements Serializable {
     private String currentMessage;
     private Topic topic;
     private AIService aiService;
-    private CompletableFuture<String> future;
     boolean processing = false;
 
     @PostConstruct
@@ -36,7 +35,7 @@ public class Classroom implements Serializable {
             topic = (Topic) flashTopic;
             messages.add(new BubbleChatMessage(topic.getPrompt(), BubbleChatMessage.Sender.BOT));
             aiService = AiServices.builder(AIService.class)
-                    .chatLanguageModel(AIService.CHAT_LANGUAGE_MODEL)
+                    .streamingChatLanguageModel(AIService.STREAMING_CHAT_LANGUAGE_MODEL)
                     .systemMessageProvider(id->topic.getSystemPrompt())
                     .build();
         }
@@ -48,19 +47,25 @@ public class Classroom implements Serializable {
 
 
     public void sendMessage() {
-        if (future != null && !future.isDone()) {
+        if (isProcessing())
             return;
-        }
         currentMessage = currentMessage == null ? null : currentMessage.trim();
         if (currentMessage != null && !currentMessage.isEmpty()) {
             messages.add(new BubbleChatMessage(currentMessage, BubbleChatMessage.Sender.USER));
             processing = true;
-            future = CompletableFuture.supplyAsync(() -> aiService.generate(currentMessage).content());
-            future.thenAccept(content -> {
-                BubbleChatMessage botMessage = new BubbleChatMessage(content, BubbleChatMessage.Sender.BOT);
-                messages.add(botMessage);
-                currentMessage = "";
+            BubbleChatMessage botMessage = new BubbleChatMessage("", BubbleChatMessage.Sender.BOT);
+            messages.add(botMessage);
+            CompletableFuture<Void> future = CompletableFuture.runAsync(()->{
+                aiService.generate(currentMessage)
+                        .onNext(botMessage::stream)
+                        .onComplete(response->{processing = false;})
+                        .onError(throwable -> {throwable.printStackTrace(); processing = false;})
+                        .start();
+            });
+            future.exceptionally(throwable -> {
                 processing = false;
+                throwable.printStackTrace();
+                return null;
             });
         }
     }

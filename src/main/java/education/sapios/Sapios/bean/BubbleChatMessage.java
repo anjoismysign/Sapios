@@ -1,5 +1,7 @@
 package education.sapios.Sapios.bean;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 
 public class BubbleChatMessage implements Serializable {
@@ -25,6 +27,10 @@ public class BubbleChatMessage implements Serializable {
     public BubbleChatMessage(String content, String sender) {
         this.content = content;
         this.sender = sender;
+    }
+
+    public void stream(@NotNull String content){
+        this.content = this.content + content;
     }
 
     public String getContent() {
