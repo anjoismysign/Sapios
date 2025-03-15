@@ -32,6 +32,10 @@ public class TopicBuilder implements Serializable {
     private CourseRepository courseRepository;
 
     public void addTopic() {
+        if (name == null || name.trim().isEmpty()) {
+            return;
+        }
+
         @Nullable Course course = courseRepository.findFirstByName(this.course).orElse(null);
         if (course == null) {
             FacesContext.getCurrentInstance().addMessage(

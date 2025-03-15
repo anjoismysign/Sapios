@@ -5,6 +5,7 @@ import education.sapios.Sapios.entity.hallway.Topic;
 import education.sapios.Sapios.repository.CourseRepository;
 import education.sapios.Sapios.repository.TopicRepository;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -30,6 +31,9 @@ public class Hallway implements Serializable {
     private Course course;
     private Topic topic;
 
+    @Inject
+    private Classroom classroom;
+
     public void onCourseChange() {
         if (course != null) {
             topics = topicRepository.findByCourse(course);
@@ -39,7 +43,10 @@ public class Hallway implements Serializable {
     }
 
     public String submit() {
-        return "nextPage";
+        if (topic != null) {
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("topic", topic);
+        }
+        return "clase?faces-redirect=true";
     }
 
     public List<Course> getCourses() {

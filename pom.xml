@@ -16,7 +16,8 @@
     <description>Demo project for Spring Boot</description>
     <properties>
         <hibernate.version>6.1.7.Final</hibernate.version>
-        <java.version>17</java.version>
+        <langchain4j.version>0.35.0</langchain4j.version>
+        <java.version>21</java.version>
     </properties>
 
     <dependencies>
@@ -75,9 +76,30 @@
             <version>5.4.3</version>
         </dependency>
         <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>14.0.0</version>
+            <classifier>jakarta</classifier>
+        </dependency>
+        <dependency>
             <groupId>org.mvnpm</groupId>
             <artifactId>simpledotcss</artifactId>
             <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark</artifactId>
+            <version>0.21.0</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-open-ai</artifactId>
+            <version>${langchain4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j</artifactId>
+            <version>${langchain4j.version}</version>
         </dependency>
     </dependencies>
 

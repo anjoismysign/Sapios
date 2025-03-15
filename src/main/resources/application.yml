@@ -4,4 +4,4 @@ joinfaces:
   faces:
     PROJECT_STAGE: Development
   primefaces:
-    theme: overcast
+    theme: none

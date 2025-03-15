@@ -9,17 +9,18 @@
 <h:body>
     <div class="background">
         <h:form class="container">
+
             <h:outputLabel for="course" value="Curso" class="text"/>
-            <h:selectOneMenu id="course" value="#{hallway.course}" class="dropdown-text">
-                <f:selectItems value="#{hallway.courses}" var="course" itemValue="#{course.name}"
-                               itemLabel="#{course.name}"/>
-                <f:ajax render="topic" listener="#{hallway.onCourseChange}"/>
+            <h:selectOneMenu value="#{hallway.course}" converter="#{courseConverter}" class="dropdown-text">
+                <f:selectItems value="#{hallway.courses}" var="c"
+                               itemLabel="#{c.name}" itemValue="#{c}" />
+                <f:ajax listener="#{hallway.onCourseChange}" render="topicSelect" />
             </h:selectOneMenu>
 
             <h:outputLabel for="topic" value="Tópico" class="text"/>
-            <h:selectOneMenu id="topic" value="#{hallway.topic}" class="dropdown-text">
-                <f:selectItems value="#{hallway.topics}" var="topic" itemValue="#{topic.name}"
-                               itemLabel="#{topic.name}"/>
+            <h:selectOneMenu id="topicSelect" value="#{hallway.topic}" converter="#{topicConverter}" class="dropdown-text">
+                <f:selectItems value="#{hallway.topics}" var="t"
+                               itemLabel="#{t.name}" itemValue="#{t}" />
             </h:selectOneMenu>
 
             <h:commandButton value="Ir a clase" action="#{hallway.submit}" class="text"/>

@@ -20,6 +20,10 @@ public class CourseBuilder implements Serializable {
     private CourseRepository courseRepository;
 
     public void addCourse() {
+        if (name == null || name.trim().isEmpty()) {
+            return;
+        }
+
         Course course = new Course();
         course.setName(name);
         courseRepository.save(course);
