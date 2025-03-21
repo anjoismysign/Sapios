@@ -1,4 +1,10 @@
-Setup
+### Sapios
+Allows you chatting with an AI tutor
+
+## Setup
+Set ``SAPIOS_API_KEY`` environmental variable, it currently makes use of cloud.cerebras.ai
+
+## Usage
 
 1. Start the SpringBoot server
 2. Visit at http://localhost:8080/
