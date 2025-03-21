@@ -1,2 +1,7 @@
 server:
-  port: 8081
+  port: 8080
+joinfaces:
+  faces:
+    PROJECT_STAGE: Development
+  primefaces:
+    theme: none
