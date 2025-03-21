@@ -10,7 +10,7 @@ public interface AIService {
 
     ChatLanguageModel CHAT_LANGUAGE_MODEL = OpenAiChatModel.builder()
             .baseUrl("https://api.cerebras.ai/v1")
-            .apiKey("csk-xdmcmmv46nm2kpfemf6p8ytdxyd6hmptt3f2f6xtk2kydnfc")
+            .apiKey(System.getenv("SAPIOS_API_KEY"))
             .modelName("llama3.3-70b")
             .maxTokens(8192)
             .timeout(Duration.ofSeconds(60))
