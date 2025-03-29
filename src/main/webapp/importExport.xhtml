@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns="http://www.w3.org/1999/xhtml">
+<h:head>
+    <title>Sapios - Importar/Exportar Cursos</title>
+    <h:outputStylesheet library="css" name="form.css"/>
+</h:head>
+<h:body>
+    <div class="background">
+        <h:form class="container" enctype="multipart/form-data">
+
+            <!-- Export section -->
+            <h2 class="text">Exportar Curso</h2>
+            <h:selectOneMenu value="#{importExportBean.selectedCourse}"
+                             converter="#{courseConverter}"
+                             class="dropdown-text"
+                             id="courseSelect">
+                <f:selectItems value="#{importExportBean.courses}"
+                               var="c"
+                               itemLabel="#{c.name}"
+                               itemValue="#{c}" />
+            </h:selectOneMenu>
+            <h:commandButton value="Exportar" action="#{importExportBean.exportCourse}" class="text"/>
+
+            <!-- Spacer -->
+            <div style="margin-top: 20px;"></div>
+
+            <!-- Import section -->
+            <h2 class="text">Importar Curso</h2>
+            <p:fileUpload value="#{importExportBean.uploadedFile}" mode="simple" skinSimple="true" class="text" accept=".json"/>
+            <h:commandButton value="Importar" action="#{importExportBean.importCourse}" class="text"/>
+
+            <!-- Messages -->
+            <p:messages id="messages" showDetail="true" closable="true">
+                <p:autoUpdate />
+            </p:messages>
+
+            <!-- Navigation -->
+            <h:link outcome="publisher" class="text" style="margin-top: 20px;">
+                Volver
+            </h:link>
+        </h:form>
+    </div>
+</h:body>
+</html>

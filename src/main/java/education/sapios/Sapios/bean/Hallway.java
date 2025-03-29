@@ -46,7 +46,7 @@ public class Hallway implements Serializable {
         if (topic != null) {
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("topic", topic);
         }
-        return "clase?faces-redirect=true";
+        return "classroom?faces-redirect=true";
     }
 
     public List<Course> getCourses() {
