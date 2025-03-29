@@ -1,9 +1,9 @@
 package education.sapios.Sapios.bean;
 
 import education.sapios.Sapios.entity.hallway.Course;
+import education.sapios.Sapios.message.SapioFacesMessage;
 import education.sapios.Sapios.repository.CourseRepository;
 import education.sapios.Sapios.service.CourseImportExportService;
-import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
@@ -20,7 +20,7 @@ import java.util.List;
 @Named
 @ViewScoped
 public class ImportExportBean implements Serializable {
-    
+    private static final SapioFacesMessage SENDER = SapioFacesMessage.INSTANCE;
     private static final long serialVersionUID = 1L;
     
     @Inject
@@ -38,7 +38,7 @@ public class ImportExportBean implements Serializable {
      */
     public void exportCourse() {
         if (selectedCourse == null) {
-            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Please select a course to export");
+            SENDER.error("Please select a course to export");
             return;
         }
 
@@ -57,8 +57,8 @@ public class ImportExportBean implements Serializable {
             outputStream.write(json.getBytes(StandardCharsets.UTF_8));
             
             facesContext.responseComplete();
-        } catch (IOException e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error exporting course: " + e.getMessage());
+        } catch (IOException exception) {
+            SENDER.error(  "Error exporting course: " + exception.getMessage());
         }
     }
     
@@ -67,19 +67,19 @@ public class ImportExportBean implements Serializable {
      */
     public void importCourse() {
         if (uploadedFile == null || uploadedFile.getContent() == null || uploadedFile.getContent().length == 0) {
-            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Please select a file to upload");
+            SENDER.error(  "Please select a file to upload");
             return;
         }
         
         try {
             String json = new String(uploadedFile.getContent(), StandardCharsets.UTF_8);
             Course course = importExportService.importCourse(json);
-            addMessage(FacesMessage.SEVERITY_INFO, "Success", "Course '" + course.getName() + "' imported successfully");
+            SENDER.info("Course '" + course.getName() + "' imported successfully");
             
             // Refresh courses list
             courses = null;
-        } catch (IOException e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error importing course: " + e.getMessage());
+        } catch (IOException exception) {
+            SENDER.error("Error importing course: " + exception.getMessage());
         }
     }
     
@@ -93,17 +93,6 @@ public class ImportExportBean implements Serializable {
             courses = courseRepository.findAll();
         }
         return courses;
-    }
-    
-    /**
-     * Add a message to the faces context
-     * 
-     * @param severity The severity of the message
-     * @param summary The summary of the message
-     * @param detail The detail of the message
-     */
-    private void addMessage(FacesMessage.Severity severity, String summary, String detail) {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, summary, detail));
     }
     
     // Getters and setters

@@ -29,7 +29,7 @@ public class CourseBuilder implements Serializable {
         courseRepository.save(course);
 
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("editorial");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("publisher");
         } catch ( IOException exception ) {
             exception.printStackTrace();
         }

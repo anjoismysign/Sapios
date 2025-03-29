@@ -54,7 +54,7 @@ public class TopicBuilder implements Serializable {
         topicRepository.save(topic);
 
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("editorial");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("publisher");
         } catch ( IOException exception ) {
             exception.printStackTrace();
         }

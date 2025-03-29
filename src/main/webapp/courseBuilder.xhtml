@@ -10,6 +10,9 @@
             <h:outputLabel for="courseName" value="Nombre del curso" class="text"/>
             <h:inputText id="courseName" value="#{courseBuilder.name}" class="input-text"/>
             <h:commandButton value="Añadir" action="#{courseBuilder.addCourse}" class="text"/>
+            <h:link outcome="publisher" class="text" style="margin-top: 20px;">
+                Volver
+            </h:link>
         </h:form>
     </div>
 </h:body>
