@@ -11,7 +11,7 @@
     <groupId>education.sapios</groupId>
     <artifactId>Sapios</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>Sapios</name>
     <description>Demo project for Spring Boot</description>
     <properties>
@@ -104,6 +104,7 @@
     </dependencies>
 
     <build>
+        <finalName>server</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
