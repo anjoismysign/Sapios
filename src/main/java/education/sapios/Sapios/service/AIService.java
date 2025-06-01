@@ -12,14 +12,14 @@ import java.util.Properties;
 public interface AIService {
 
     static ChatLanguageModel createChatLanguageModel() {
-        Properties prop = new Properties();
+        Properties properties = new Properties();
         try (FileInputStream input = new FileInputStream("config/ai.properties")) {
-            prop.load(input);
+            properties.load(input);
         } catch (IOException exception) {
             // failed to load config, defaults will be used
         }
-        String baseUrl = prop.getProperty("baseUrl", "https://api.cerebras.ai/v1");
-        String modelName = prop.getProperty("modelName", "llama3.3-70b");
+        String baseUrl = properties.getProperty("baseUrl", "https://api.cerebras.ai/v1");
+        String modelName = properties.getProperty("modelName", "llama3.3-70b");
         return OpenAiChatModel.builder()
                 .baseUrl(baseUrl)
                 .apiKey(System.getenv("SAPIOS_API_KEY"))
