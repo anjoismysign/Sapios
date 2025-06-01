@@ -1,8 +1,7 @@
-package education.sapios.Sapios.service;
+package education.sapios.Sapios.config;
 
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
-import dev.langchain4j.service.Result;
 import jakarta.annotation.Nullable;
 
 import java.io.FileInputStream;
@@ -11,9 +10,10 @@ import java.time.Duration;
 import java.util.Objects;
 import java.util.Properties;
 
-public interface AIService {
+public enum LanguageModelConfig {
+    INSTANCE();
 
-    static ChatLanguageModel createChatLanguageModel() {
+    public ChatLanguageModel createChatLanguageModel() {
         Properties properties = new Properties();
         try (FileInputStream input = new FileInputStream("config/ai.properties")) {
             properties.load(input);
@@ -32,8 +32,4 @@ public interface AIService {
                 .timeout(Duration.ofSeconds(60))
                 .build();
     }
-
-    ChatLanguageModel CHAT_LANGUAGE_MODEL = createChatLanguageModel();
-
-    Result<String> generate(String input);
 }
