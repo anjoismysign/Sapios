@@ -22,12 +22,8 @@ public class CourseConverter implements Converter<Course> {
             return null;
         }
         
-        try {
-            Long id = Long.valueOf(value);
-            return courseRepository.findById(id).orElse(null);
-        } catch (NumberFormatException e) {
-            return null;
-        }
+        String id = value;
+        return courseRepository.findById(id).orElse(null);
     }
 
     @Override
