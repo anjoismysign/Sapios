@@ -7,6 +7,8 @@
 <h:body>
     <div class="background">
         <h:form class="container">
+            <h:outputLabel for="courseId" value="ID del curso" class="text"/>
+            <h:inputText id="courseId" value="#{courseBuilder.id}" class="input-text"/>
             <h:outputLabel for="courseName" value="Nombre del curso" class="text"/>
             <h:inputText id="courseName" value="#{courseBuilder.name}" class="input-text"/>
             <h:commandButton value="Añadir" action="#{courseBuilder.addCourse}" class="text"/>
