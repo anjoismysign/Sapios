@@ -6,6 +6,18 @@
 <h:head>
     <title>Sapios Classroom</title>
     <h:outputStylesheet library="css" name="classroom.css" />
+    <script type="text/javascript">
+        function handleChatInputKeydown(event, textareaElement, sendButtonClientId) {
+            // 13 is the keyCode for the Enter key
+            if (event.keyCode === 13) {
+                if (event.shiftKey) {
+                } else {
+                    event.preventDefault();
+                    document.getElementById(sendButtonClientId).click();
+                }
+            }
+        }
+    </script>
 </h:head>
 <h:body>
     <div class="blur-sm"
@@ -48,12 +60,13 @@
         <h:form class="input-button-wrapper">
             <p:inputTextarea rows="1" id="messageInput"
                              value="#{classroom.currentMessage}"
-                             styleClass="rounded-textbox"/>
+                             styleClass="rounded-textbox"
+                             onkeydown="handleChatInputKeydown(event, this, '#{component.parent.findComponent('sendButton').clientId}')"/>
             <h:commandButton id="sendButton"
                              value="Enviar"
                              action="#{classroom.sendMessage}"
                              styleClass="inside-button">
-                <f:ajax execute="@form" render="chatMessages" />
+                <f:ajax execute="@form" render="chatMessages @form" />
             </h:commandButton>
         </h:form>
     </div>

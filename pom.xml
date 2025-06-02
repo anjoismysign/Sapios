@@ -11,12 +11,12 @@
     <groupId>education.sapios</groupId>
     <artifactId>Sapios</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>Sapios</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <hibernate.version>6.1.7.Final</hibernate.version>
-        <langchain4j.version>0.35.0</langchain4j.version>
+        <langchain4j.version>1.0.0-beta3</langchain4j.version>
         <java.version>21</java.version>
     </properties>
 
@@ -104,6 +104,7 @@
     </dependencies>
 
     <build>
+        <finalName>server</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
