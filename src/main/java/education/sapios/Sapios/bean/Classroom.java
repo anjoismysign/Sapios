@@ -3,7 +3,9 @@ package education.sapios.Sapios.bean;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.StreamingChatLanguageModel;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import education.sapios.Sapios.entity.hallway.Topic;
 import education.sapios.Sapios.config.LanguageModelConfig;
 import jakarta.annotation.PostConstruct;
@@ -18,6 +20,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 @Named
@@ -29,14 +32,9 @@ public class Classroom implements Serializable {
     private final List<ChatMessage> chatMessages = new ArrayList<>();
     private String currentMessage;
     private Topic topic;
-    private ChatLanguageModel model;
+    private StreamingChatLanguageModel model;
     private CompletableFuture<String> future;
     boolean processing = false;
-
-    private static String regex = "(?s)<think>.*?</think>";
-
-    // Compila la expresión regular
-    private static Pattern pattern = Pattern.compile(regex);
 
     @PostConstruct
     public void init() {
@@ -47,7 +45,7 @@ public class Classroom implements Serializable {
             String prompt = topic.getPrompt();
             messages.add(new BubbleChatMessage(prompt, BubbleChatMessage.Sender.BOT));
             chatMessages.add(new AiMessage(prompt));
-            model = LanguageModelConfig.INSTANCE.createChatLanguageModel();
+            model = LanguageModelConfig.INSTANCE.createStreamingChatLanguageModel();
         }
     }
 
@@ -69,17 +67,36 @@ public class Classroom implements Serializable {
             chatMessages.add(new UserMessage(userMessageText));
 
             currentMessage = "";
-
             processing = true;
-            future = CompletableFuture.supplyAsync(() -> model.chat(chatMessages).aiMessage().text());
-            future.thenAccept(content -> {
-                BubbleChatMessage botMessage = new BubbleChatMessage(pattern.matcher(content).replaceAll(""), BubbleChatMessage.Sender.BOT);
-                messages.add(botMessage);
+
+            BubbleChatMessage botBubbleChatMessage = new BubbleChatMessage("", BubbleChatMessage.Sender.BOT);
+            messages.add(botBubbleChatMessage);
+            chatAsync(botBubbleChatMessage);
+        }
+    }
+
+    public void chatAsync(BubbleChatMessage botBubbleChatMessage){
+
+        model.chat(chatMessages, new StreamingChatResponseHandler() {
+            @Override
+            public void onPartialResponse(String partialResponse) {
+                botBubbleChatMessage.append(partialResponse);
+            }
+
+            @Override
+            public void onCompleteResponse(ChatResponse chatResponse) {
+                String content = chatResponse.aiMessage().text();
                 chatMessages.add(new AiMessage(content));
                 processing = false;
-                // Ya no es necesario limpiar currentMessage aquí
-            });
-        }
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                botBubbleChatMessage.setContent("");
+                chatAsync(botBubbleChatMessage);
+            }
+        });
+
     }
 
     public String parseMarkdown(String markdown) {
@@ -97,15 +114,15 @@ public class Classroom implements Serializable {
     public List<BubbleChatMessage> getChat(){
         return messages.subList(1, messages.size() - 1);
     }
-    
+
     public String getCurrentMessage() {
         return currentMessage;
     }
-    
+
     public void setCurrentMessage(String currentMessage) {
         this.currentMessage = currentMessage.trim();
     }
-    
+
     public String getTitle() {
         return topic == null ? "" : topic.display();
     }

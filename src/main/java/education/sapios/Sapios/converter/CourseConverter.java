@@ -21,9 +21,8 @@ public class CourseConverter implements Converter<Course> {
         if (value == null || value.isEmpty()) {
             return null;
         }
-        
-        String id = value;
-        return courseRepository.findById(id).orElse(null);
+
+        return courseRepository.findById(value).orElse(null);
     }
 
     @Override
@@ -32,6 +31,6 @@ public class CourseConverter implements Converter<Course> {
             return "";
         }
         
-        return String.valueOf(course.getId());
+        return course.getId();
     }
 }

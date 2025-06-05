@@ -42,4 +42,8 @@ public class BubbleChatMessage implements Serializable {
     public void setSender(String sender) {
         this.sender = sender;
     }
+
+    public void append(String text) {
+        content = content + text;
+    }
 }

@@ -1,6 +1,10 @@
 package education.sapios.Sapios.config;
 
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.StreamingChatLanguageModel;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
+import dev.langchain4j.model.googleai.GoogleAiGeminiStreamingChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import jakarta.annotation.Nullable;
 
@@ -18,12 +22,14 @@ public enum LanguageModelConfig {
         try (FileInputStream input = new FileInputStream("config/ai.properties")) {
             properties.load(input);
         } catch (IOException exception) {
-            // failed to load config, defaults will be used
+            throw new RuntimeException("Failed to load ai.properties file", exception);
         }
-        String baseUrl = properties.getProperty("baseUrl", "https://api.cerebras.ai/v1");
-        String modelName = properties.getProperty("modelName", "llama3.3-70b");
+        @Nullable String baseUrl = properties.getProperty("baseUrl", null);
+        @Nullable String modelName = properties.getProperty("modelName", null);
         @Nullable String apiKey = properties.getProperty("apiKey", null);
-        Objects.requireNonNull(apiKey, "API key must be set in config/ai.properties");
+        Objects.requireNonNull(baseUrl, "'baseUrl' must be set in config/ai.properties");
+        Objects.requireNonNull(modelName, "'modelName' must be set in config/ai.properties");
+        Objects.requireNonNull(apiKey, "'apiKey' must be set in config/ai.properties");
         return OpenAiChatModel.builder()
                 .baseUrl(baseUrl)
                 .apiKey(apiKey)
@@ -31,5 +37,27 @@ public enum LanguageModelConfig {
                 .maxTokens(8192)
                 .timeout(Duration.ofSeconds(60))
                 .build();
+    }
+
+    public StreamingChatLanguageModel createStreamingChatLanguageModel() {
+        Properties properties = new Properties();
+        try (FileInputStream input = new FileInputStream("config/ai.properties")) {
+            properties.load(input);
+        } catch (IOException exception) {
+            throw new RuntimeException("Failed to load ai.properties file", exception);
+        }
+        @Nullable String baseUrl = properties.getProperty("baseUrl", null);
+        @Nullable String modelName = properties.getProperty("modelName", null);
+        @Nullable String apiKey = properties.getProperty("apiKey", null);
+        Objects.requireNonNull(baseUrl, "'baseUrl' must be set in config/ai.properties");
+        Objects.requireNonNull(modelName, "'modelName' must be set in config/ai.properties");
+        Objects.requireNonNull(apiKey, "'apiKey' must be set in config/ai.properties");
+
+        StreamingChatLanguageModel model = GoogleAiGeminiStreamingChatModel.builder()
+                .apiKey(apiKey)
+                .modelName(modelName)
+                .build();
+
+        return model;
     }
 }
