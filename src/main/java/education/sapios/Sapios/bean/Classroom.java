@@ -20,8 +20,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
-import java.util.regex.Pattern;
 
 @Named
 @ViewScoped
@@ -53,7 +51,6 @@ public class Classroom implements Serializable {
         return processing;
     }
 
-
     public void sendMessage() {
         if (future != null && !future.isDone()) {
             return;
@@ -76,7 +73,6 @@ public class Classroom implements Serializable {
     }
 
     public void chatAsync(BubbleChatMessage botBubbleChatMessage){
-
         model.chat(chatMessages, new StreamingChatResponseHandler() {
             @Override
             public void onPartialResponse(String partialResponse) {

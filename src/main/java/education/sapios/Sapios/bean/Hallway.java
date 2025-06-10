@@ -56,7 +56,6 @@ public class Hallway implements Serializable {
     }
 
     public String submit() {
-        System.out.println("[Hallway] submit, selected course: " + (course != null ? course.getName() : "null"));
         if (topic != null) {
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("topic", topic);
         }
@@ -88,7 +87,6 @@ public class Hallway implements Serializable {
     }
 
     public void setTopic(Topic topic) {
-        System.out.println(topic.getCourse().getName()+"-"+topic.getName());
         this.topic = topic;
     }
 }
