@@ -4,8 +4,10 @@ import education.sapios.Sapios.entity.hallway.Course;
 import education.sapios.Sapios.entity.hallway.Topic;
 import education.sapios.Sapios.repository.CourseRepository;
 import education.sapios.Sapios.repository.TopicRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -14,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Named
-@SessionScoped
+@ViewScoped
 public class Hallway implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,6 +36,17 @@ public class Hallway implements Serializable {
     @Inject
     private Classroom classroom;
 
+    @PostConstruct
+    public void init() {
+        courses = courseRepository.findAll();
+        if (!courses.isEmpty()) {
+            course = courses.getFirst(); // Set the default course
+            onCourseChange(); // Populate topics for the default course
+        } else {
+            topics = new ArrayList<>();
+        }
+    }
+
     public void onCourseChange() {
         if (course != null) {
             topics = topicRepository.findByCourse(course);
@@ -43,6 +56,7 @@ public class Hallway implements Serializable {
     }
 
     public String submit() {
+        System.out.println("[Hallway] submit, selected course: " + (course != null ? course.getName() : "null"));
         if (topic != null) {
             FacesContext.getCurrentInstance().getExternalContext().getFlash().put("topic", topic);
         }
@@ -57,10 +71,6 @@ public class Hallway implements Serializable {
     public List<Topic> getTopics() {
         if (topics == null) {
             topics = new ArrayList<>();
-        }
-        if (!courses.isEmpty()) {
-            course = courses.get(0);
-            topics = topicRepository.findByCourse(course);
         }
         return topics;
     }
@@ -78,6 +88,7 @@ public class Hallway implements Serializable {
     }
 
     public void setTopic(Topic topic) {
+        System.out.println(topic.getCourse().getName()+"-"+topic.getName());
         this.topic = topic;
     }
 }

@@ -15,13 +15,12 @@ public class CourseConverter implements Converter<Course> {
 
     @Inject
     private CourseRepository courseRepository;
-    
+
     @Override
     public Course getAsObject(FacesContext context, UIComponent component, String value) {
         if (value == null || value.isEmpty()) {
             return null;
         }
-
         return courseRepository.findById(value).orElse(null);
     }
 
@@ -30,7 +29,7 @@ public class CourseConverter implements Converter<Course> {
         if (course == null) {
             return "";
         }
-        
+
         return course.getId();
     }
 }

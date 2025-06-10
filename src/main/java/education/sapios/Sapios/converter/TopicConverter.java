@@ -25,7 +25,8 @@ public class TopicConverter implements Converter<Topic> {
         try {
             Long id = Long.valueOf(value);
             return topicRepository.findById(id).orElse(null);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException exception) {
+            exception.printStackTrace();
             return null;
         }
     }

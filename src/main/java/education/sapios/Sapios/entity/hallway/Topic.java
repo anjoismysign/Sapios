@@ -9,6 +9,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "topics")
 public class Topic {
@@ -81,22 +83,16 @@ public class Topic {
             """.formatted(course.getName(), prompt);
     }
 
-    /**
-     * String teachingContent = """
-     *             Introduction to Calculus:
-     *             - A derivative represents the rate of change of a function.
-     *             - For example, the derivative of f(x) = x^2 is 2x, which gives the slope of the tangent line at any point on the curve.
-     *             """;
-     *
-     *         // Create the system prompt that incorporates the teaching content using a text block and formatted string
-     *         String systemPrompt = """
-     *             You are a patient and knowledgeable tutor specialized in Calculus.
-     *             Below is the teaching material for today's lesson:
-     *
-     *             %s
-     *
-     *             When a student asks a question, answer using only the information in the above material.
-     *             Explain your answer step-by-step.
-     *             """.formatted(teachingContent);
-     */
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        Topic topic = (Topic) other;
+        return Objects.equals(id, topic.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
