@@ -17,6 +17,7 @@ dependencies {
     implementation("io.quarkiverse.primefaces:quarkus-primefaces:3.15.4")
     implementation("io.quarkiverse.primefaces:quarkus-primefaces-extensions:3.15.4")
     implementation("io.quarkus:quarkus-arc")
+    implementation("io.quarkus:quarkus-resteasy")
     testImplementation("io.quarkus:quarkus-junit5")
 }
 
