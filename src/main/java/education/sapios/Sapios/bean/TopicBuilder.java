@@ -8,8 +8,8 @@ import jakarta.annotation.Nullable;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -25,10 +25,10 @@ public class TopicBuilder implements Serializable {
     private int order;
     private List<Course> courses;
 
-    @Autowired
+    @Inject
     private TopicRepository topicRepository;
 
-    @Autowired
+    @Inject
     private CourseRepository courseRepository;
 
     public void addTopic() {

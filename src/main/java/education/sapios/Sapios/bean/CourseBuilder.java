@@ -4,8 +4,8 @@ import education.sapios.Sapios.entity.hallway.Course;
 import education.sapios.Sapios.repository.CourseRepository;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -17,7 +17,7 @@ public class CourseBuilder implements Serializable {
     private String id;
     private String name;
 
-    @Autowired
+    @Inject
     private CourseRepository courseRepository;
 
     public void addCourse() {
